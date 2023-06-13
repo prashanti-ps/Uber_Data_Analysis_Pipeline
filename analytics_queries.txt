@@ -1,0 +1,52 @@
+CREATE OR REPLACE TABLE `eloquent-hangar-387821.uber_dataset.tbl_analytics` AS(
+SELECT 
+    f.Vendor_id,
+    f.passenger_count,
+    f.trip_distance,
+    d.Date_value AS pickup_date,
+    d1.Date_value AS dropoff_date,
+    t.Time_Value AS pickup_time,
+    t1.Time_Value AS dropoff_time,
+    r.Code_Name,
+    f.pickup_latitude,
+    f.pickup_longitude,
+    f.dropoff_latitude,
+    f.dropoff_longitude,
+    f.fare_amount,
+    p.Code_Name AS payment_type,
+    f.extra,
+    f.mta_tax,
+    f.improvement_surcharge,
+    f.tolls_amount,
+    f.total_amount
+FROM 
+  `eloquent-hangar-387821.uber_dataset.fact_table` f
+JOIN
+  `eloquent-hangar-387821.uber_dataset.date_dim` d
+ON
+f.Pickup_Date_id=d.Date_id
+JOIN
+  `eloquent-hangar-387821.uber_dataset.date_dim` d1
+ON
+f.Drop_Date_id = d1.Date_id
+JOIN
+  `eloquent-hangar-387821.uber_dataset.dim_time` t
+ON
+f.Pickup_Time_id=t.Time_id
+JOIN
+  `eloquent-hangar-387821.uber_dataset.dim_time` t1
+ON
+f.Drop_Time_id = t1.Time_id
+JOIN
+  `eloquent-hangar-387821.uber_dataset.dim_payment` p
+ON
+f.Payment_id=p.Payment_id
+JOIN
+  `eloquent-hangar-387821.uber_dataset.dim_rate` r
+ON
+f.Rate_id=r.Rate_id
+JOIN
+  `eloquent-hangar-387821.uber_dataset.dim_vendor` v
+ON
+f.Vendor_id=v.Vendor_id
+);
